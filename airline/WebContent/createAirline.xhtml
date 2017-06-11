@@ -9,9 +9,14 @@
 </h:head>
 
 <h:body>
-Create flight
 
-
-
+	<h1>Create New Airline</h1>
+	<h:commandButton value="back" action="airline.xhtml" />
+	<h:form>
+		<h:outputText value="name:" />
+		<h:inputText id="nameInput" value="${airlineBean.airlineName}" />
+		<h:commandButton value="Create Airline"
+			action="#{airlineBean.createAirline()}" />
+	</h:form>
 </h:body>
 </html>

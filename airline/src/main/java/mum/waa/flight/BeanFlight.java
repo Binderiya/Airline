@@ -14,33 +14,54 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
+import mum.waa.model.Airline;
 import mum.waa.model.Flight;
 
 @ManagedBean(name = "bean")
 @SessionScoped
 public class BeanFlight {
+	public String getSearchDestination() {
+		return searchDestination;
+	}
+	public void setSearchDestination(String searchDestination) {
+		this.searchDestination = searchDestination;
+	}
 	private static final String SUCCESS_RESULT = "<result>success</result>";
 	private static final String PASS = "sucess";
 	private static final String FAIL = "fail";
+	@ManagedProperty(value = "#{airlineList}")
+	private List<Airline> airlineList;
+	public List<Airline> getAirlineList() {
+		return airlineList;
+	}
+	public void setAirlineList(List<Airline> airlineList) {
+		this.airlineList = airlineList;
+	}
 	@ManagedProperty(value = "#{flightList}")
 	private List<Flight> flightList;
 	private String Message;
 	@ManagedProperty(value = "#{searchString}")
 	private String searchString = "";
-	
-	public String getSearchString() {
-		return searchString;
+	@ManagedProperty(value = "#{searchDestination}")
+	private String searchDestination="";
+	@ManagedProperty(value = "#{searchDate}")
+	private String searchDate="";
+	public String getSearchDate() {
+		return searchDate;
 	}
-	
-
-
-	public void setSearchString(String searchString) {
-		this.searchString = searchString;
+	public void setSearchDate(String searchDate) {
+		this.searchDate = searchDate;
 	}
-
 	public void search(){
-	System.out.println("Search");
-	System.out.println(searchString);
+	}
+	public void searchArrivalBetween(){
+		
+	}
+	public void searchByDestination(){
+		
+	}
+	public void searchByDate(){
+		
 	}
 	public void filterAirline(AjaxBehaviorEvent event) {
 		if (searchString.isEmpty()) {
@@ -51,16 +72,46 @@ public class BeanFlight {
 			flightList = a;
 		} else {
 			Client client = ClientBuilder.newClient();
-			System.out.println(searchString);
 			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByAirline?airline="+searchString)
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
-			
-			System.out.println(a.size());
-//	
 			flightList = a;
 		}
 	}
+	public void filterDestination(AjaxBehaviorEvent event) {
+		if (searchDestination.isEmpty()) {
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		} else {
+			System.out.println("not null "+searchDestination);
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDestination?airportId="+searchDestination)
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		}
+	}
+	
+	public void filterDate(AjaxBehaviorEvent event) {
+		if (searchDate.isEmpty()) {
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		} else {
+			System.out.println("not null "+searchDate);
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDeparture?airportId="+searchDate)
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		}
+	}
+
 
 	public List<Flight> getAllFlight() {
 		Client client = ClientBuilder.newClient();
@@ -80,6 +131,8 @@ public class BeanFlight {
 		flightList = a;
 		return "/flights.xhtml?faces-redirect=true";
 	}
+	
+
 
 	public void create() throws ClientErrorException {
 		System.out.println("!!!!!!!!!!!!!!!!!!!11111");
@@ -119,5 +172,14 @@ public class BeanFlight {
 	public void setFlightList(List<Flight> flightList) {
 		this.flightList = flightList;
 	}
+
+	public String getSearchString() {
+		return searchString;
+	}
+	
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
+
 
 }

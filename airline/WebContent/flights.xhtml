@@ -9,21 +9,42 @@
 </h:head>
 
 <h:body>
-Welcome
+	<h1>Flights</h1>
 	<h:form>
-		<h:commandButton value="Create" action="#{bean.create()}" />
+	<h:commandButton value="Exit" action="index.xhtml" />
+	</h:form>
+	<h:form>
+		<h:commandButton value="Airline List" action="#{airlineBean.getAirlines()}" />
 	</h:form>
 
 	<h:form id="flightForm">
 		<h:outputLabel value="Search:" />
 		<h:panelGrid columns="3">
-		<h:inputText id="searchAirlineInput" value="#{bean.searchString}">
-		</h:inputText>
-		<h:commandButton value="search" action="#{bean.search()}">
-			<f:ajax event="click" listener="#{bean.filterAirline}"
-				execute="@this" render="table" />
-		</h:commandButton>
+			<h:inputText id="searchAirlineInput" value="${bean.searchString}" />
+			<h:commandButton value="search" action="#{bean.search()}">
+				<f:ajax event="click" listener="#{bean.filterAirline}"
+					execute="@form" render="table" />
+			</h:commandButton>
 		</h:panelGrid>
+
+		<h:panelGrid columns="3">
+			<h:inputText id="searchDestinationInput"
+				value="${bean.searchDestination}" />
+			<h:commandButton value="searchDestination"
+				action="#{bean.searchByDestination()}">
+				<f:ajax event="click" listener="#{bean.filterDestination}"
+					execute="@form" render="table" />
+			</h:commandButton>
+		</h:panelGrid>
+
+		<h:panelGrid columns="3">
+			<h:inputText id="searchDateInput" value="${bean.searchDate}" />
+			<h:commandButton value="search by Date" action="#{bean.searchByDate()}">
+				<f:ajax event="click" listener="#{bean.filterDate}"
+					execute="@form" render="table" />
+			</h:commandButton>
+		</h:panelGrid>
+
 		<h:dataTable id="table" value="#{bean.flightList}" var="flightValue"
 			border="1">
 
@@ -77,9 +98,15 @@ Welcome
 			</h:column>
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="Destination" />
+					<h:outputText value="Destination (airport id)" />
 				</f:facet>
 				<h:outputText value="#{flightValue.destination.name}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">
+					<h:outputText value="Destination (airport id)" />
+				</f:facet>
+				<h:outputText value="#{flightValue.destination.id}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">
