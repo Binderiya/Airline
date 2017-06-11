@@ -23,46 +23,57 @@ public class BeanFlight {
 	public String getSearchDestination() {
 		return searchDestination;
 	}
+
 	public void setSearchDestination(String searchDestination) {
 		this.searchDestination = searchDestination;
 	}
+
 	private static final String SUCCESS_RESULT = "<result>success</result>";
 	private static final String PASS = "sucess";
 	private static final String FAIL = "fail";
 	@ManagedProperty(value = "#{airlineList}")
 	private List<Airline> airlineList;
+
 	public List<Airline> getAirlineList() {
 		return airlineList;
 	}
+
 	public void setAirlineList(List<Airline> airlineList) {
 		this.airlineList = airlineList;
 	}
+
 	@ManagedProperty(value = "#{flightList}")
 	private List<Flight> flightList;
 	private String Message;
 	@ManagedProperty(value = "#{searchString}")
 	private String searchString = "";
 	@ManagedProperty(value = "#{searchDestination}")
-	private String searchDestination="";
-	@ManagedProperty(value = "#{searchDate}")
-	private String searchDate="";
-	public String getSearchDate() {
-		return searchDate;
+	private String searchDestination = "";
+	@ManagedProperty(value = "#{searchOrigin}")
+	private String searchOrigin = "";
+	@ManagedProperty(value = "#{searchArrivalDate}")
+	private String searchArrivalDate = "";
+	@ManagedProperty(value = "#{searchDepartureDate}")
+	private String searchDepartureDate = "";
+
+	public void search() {
 	}
-	public void setSearchDate(String searchDate) {
-		this.searchDate = searchDate;
+
+	public void searchByArrivalDate() {
+
 	}
-	public void search(){
+
+	public void searchByDepartureDate() {
+
 	}
-	public void searchArrivalBetween(){
-		
+
+	public void searchByDestination() {
+
 	}
-	public void searchByDestination(){
-		
+	public void searchByOrigin() {
+
 	}
-	public void searchByDate(){
-		
-	}
+
 	public void filterAirline(AjaxBehaviorEvent event) {
 		if (searchString.isEmpty()) {
 			Client client = ClientBuilder.newClient();
@@ -72,12 +83,14 @@ public class BeanFlight {
 			flightList = a;
 		} else {
 			Client client = ClientBuilder.newClient();
-			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByAirline?airline="+searchString)
+			List<Flight> a = client
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByAirline?airline=" + searchString)
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
 			flightList = a;
 		}
 	}
+
 	public void filterDestination(AjaxBehaviorEvent event) {
 		if (searchDestination.isEmpty()) {
 			Client client = ClientBuilder.newClient();
@@ -86,26 +99,67 @@ public class BeanFlight {
 					});
 			flightList = a;
 		} else {
-			System.out.println("not null "+searchDestination);
+			System.out.println("not null " + searchDestination);
 			Client client = ClientBuilder.newClient();
-			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDestination?airportId="+searchDestination)
+			List<Flight> a = client
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDestination?airportId="
+							+ searchDestination)
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
 			flightList = a;
 		}
 	}
-	
-	public void filterDate(AjaxBehaviorEvent event) {
-		if (searchDate.isEmpty()) {
+
+	public void filterOrigin(AjaxBehaviorEvent event) {
+		if (searchOrigin.isEmpty()) {
 			Client client = ClientBuilder.newClient();
 			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
 			flightList = a;
 		} else {
-			System.out.println("not null "+searchDate);
+			System.out.println("not null " + searchOrigin);
 			Client client = ClientBuilder.newClient();
-			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDeparture?airportId="+searchDate)
+			List<Flight> a = client
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByOrigin?originId="
+							+ searchOrigin)
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		}
+	}
+	public void filterArrivalDate(AjaxBehaviorEvent event) {
+		if (searchArrivalDate.isEmpty()) {
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		} else {
+			System.out.println("not null " + searchArrivalDate);
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByArrivalDate?dateTime="
+							+ searchArrivalDate)
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		}
+	}
+	
+	public void filterDepartureDate(AjaxBehaviorEvent event) {
+		if (searchDepartureDate.isEmpty()) {
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+					});
+			flightList = a;
+		} else {
+			System.out.println("not null " + searchDepartureDate);
+			Client client = ClientBuilder.newClient();
+			List<Flight> a = client
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByDepartureDate?dateTime="
+							+ searchDepartureDate)
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
 			flightList = a;
@@ -122,7 +176,6 @@ public class BeanFlight {
 		return flightList;
 	}
 
-	
 	public String getFlights() {
 		Client client = ClientBuilder.newClient();
 		List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
@@ -131,8 +184,6 @@ public class BeanFlight {
 		flightList = a;
 		return "/flights.xhtml?faces-redirect=true";
 	}
-	
-
 
 	public void create() throws ClientErrorException {
 		System.out.println("!!!!!!!!!!!!!!!!!!!11111");
@@ -176,10 +227,35 @@ public class BeanFlight {
 	public String getSearchString() {
 		return searchString;
 	}
-	
+
 	public void setSearchString(String searchString) {
 		this.searchString = searchString;
 	}
 
+	public String getSearchArrivalDate() {
+		return searchArrivalDate;
+	}
+
+	public void setSearchArrivalDate(String searchArrivalDate) {
+		this.searchArrivalDate = searchArrivalDate;
+	}
+
+	public String getSearchDepartureDate() {
+		return searchDepartureDate;
+	}
+
+	public void setSearchDepartureDate(String searchDepartureDate) {
+		this.searchDepartureDate = searchDepartureDate;
+	}
+
+	public String getSearchOrigin() {
+		return searchOrigin;
+	}
+
+	public void setSearchOrigin(String searchOrigin) {
+		this.searchOrigin = searchOrigin;
+	}
+	
+	
 
 }
