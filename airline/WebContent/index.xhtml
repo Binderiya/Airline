@@ -10,24 +10,12 @@
 
 <h:body>
 Welcome
-
-<h:dataTable  id="flightListTable" value="#{flightBean.getAllFlights()}" var="flight"
-		border="1">
-
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="id" />
-			</f:facet>
-			<h:outputText value="#{flight.id}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="airline" />
-			</f:facet>
-			<h:outputText value="#{flight.airline.name}" />
-		</h:column>
-
-	</h:dataTable>
-
+	<h:form>
+		<h:commandButton value="Create" action="#{bean.create()}" />
+	</h:form>
+	<h:form>
+		<h:commandButton value="Show flight list" action="#{bean.getFlights()}" />
+	</h:form>
+	
 </h:body>
 </html>
