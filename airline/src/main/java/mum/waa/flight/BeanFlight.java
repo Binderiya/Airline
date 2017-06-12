@@ -186,15 +186,15 @@ public class BeanFlight {
 
 		return flightList;
 	}
-
-	public String getFlights() {
-		Client client = ClientBuilder.newClient();
-		List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
-				.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
-				});
-		flightList = a;
-		return "/flights.xhtml?faces-redirect=true";
-	}
+//
+//	public String getFlights() {
+//		Client client = ClientBuilder.newClient();
+//		List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+//				.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+//				});
+//		flightList = a;
+//		return "/flights?faces-redirect=true";
+//	}
 
 	public void create() throws ClientErrorException {
 		System.out.println("!!!!!!!!!!!!!!!!!!!11111");
