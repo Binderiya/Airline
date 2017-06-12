@@ -2,6 +2,7 @@ package mum.waa.flight;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -12,7 +13,6 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import mum.waa.model.Airline;
-import mum.waa.model.Flight;
 
 @ManagedBean(name = "airlineBean")
 @SessionScoped
@@ -35,6 +35,14 @@ public class AirlineBean {
 	
 	public void update(){
 		
+	}
+	@PostConstruct
+	public void init() {
+		Client client = ClientBuilder.newClient();
+		List<Airline> a = client.target("http://localhost:8080/airlinesWebApp/rs/airline/findAll")
+				.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Airline>>() {
+				});
+		airlineList = a;
 	}
 	public String createAirline(){
 		Client client = ClientBuilder.newClient();

@@ -3,150 +3,355 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+	<link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+	<style type="text/css">
+/**
+ * Override feedback icon position
+ * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
+ */
+#eventForm .form-control-feedback {
+	top: 0;
+	right: -15px;
+}
+</style>
 </h:head>
 
 <h:body>
-	<h1>Flights</h1>
-	<h:form>
-		<h:commandButton value="Exit" action="index.xhtml" />
-	</h:form>
-	<h:form>
-		<h:commandButton value="Airline List"
-			action="#{airlineBean.getAirlines()}" />
-	</h:form>
 
-	<h:form id="searchAirlineForm">
+	<div id="page" class="container">
+		<div id="header" class="page-header">
+			<ui:insert name="header">
+				<ui:include src="/common/header.xhtml" />
+			</ui:insert>
+		</div>
+		<div id="pageName">
+			<h1>Flights</h1>
+		</div>
+		<div id="exitDiv">
+			<h:form>
+				<h:commandButton value="Exit" class="btn btn-default"
+					action="index.xhtml" />
+			</h:form>
+
+		</div>
+		<div id="menuDiv">
+			<h:form>
+				<h:commandButton value="Airline List" class="btn btn-default"
+					action="#{airlineBean.getAirlines()}" />
+			</h:form>
+		</div>
 		<h:outputLabel value="Search:" />
-		<h:panelGrid columns="3">
-			<h:inputText id="searchAirlineInput" value="${bean.searchString}" />
-			<h:commandButton value="search by Airline" action="#{bean.search()}">
-				<f:ajax event="click" listener="#{bean.filterAirline}"
-					execute="@form" render="table" />
-			</h:commandButton>
-		</h:panelGrid>
-	</h:form>
-	<h:form id="searchDestinationForm">
-		<h:panelGrid columns="3">
-			<h:inputText id="searchDestinationInput"
-				value="${bean.searchDestination}" />
-			<h:commandButton value="searchDestination"
-				action="#{bean.searchByDestination()}">
-				<f:ajax event="click" listener="#{bean.filterDestination}"
-					execute="@form" render="table" />
-			</h:commandButton>
-		</h:panelGrid>
-	</h:form>
-	<h:form id="searchOriginForm">
-		<h:panelGrid columns="3">
-			<h:inputText id="searchOriginInput" value="${bean.searchOrigin}" />
-			<h:commandButton value="searchOrigin"
-				action="#{bean.searchByOrigin()}">
-				<f:ajax event="click" listener="#{bean.filterOrigin}"
-					execute="@form" render="table" />
-			</h:commandButton>
-		</h:panelGrid>
-	</h:form>
-	<h:form id="searchArrivalDateForm">
-		<h:panelGrid columns="3">
-			<h:inputText id="searchArrivalDate" value="${bean.searchArrivalDate}" />
-			<h:commandButton value="search by Arrival Date"
-				action="#{bean.searchByArrivalDate()}">
-				<f:ajax event="click" listener="#{bean.filterArrivalDate}"
-					execute="@form" render="table" />
-			</h:commandButton>
-		</h:panelGrid>
-	</h:form>
-	<h:form id="searchDepartureDateForm">
-		<h:panelGrid columns="3">
-			<h:inputText id="searchDepartureDate"
-				value="${bean.searchDepartureDate}" />
-			<h:commandButton value="search by Departure Date"
-				action="#{bean.searchByDepartureDate()}">
-				<f:ajax event="click" listener="#{bean.filterDepartureDate}"
-					execute="@form" render="table" />
-			</h:commandButton>
-		</h:panelGrid>
-	</h:form>
-	<h:dataTable id="table" value="#{bean.flightList}" var="flightValue"
-		border="1">
+		<div id="searchPart">
+			<h:form id="searchMainForm">
+				<div class="form-group row">
+					<div class="form-inline">
+						<h:form id="searchAirlineForm">
 
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="id" />
-			</f:facet>
-			<h:outputText value="#{flightValue.id}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Flight number" />
-			</f:facet>
-			<h:outputText value="#{flightValue.flightnr}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Departure Date" />
-			</f:facet>
-			<h:outputText value="#{flightValue.departureDate}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Departure Time" />
-			</f:facet>
-			<h:outputText value="#{flightValue.departureTime}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Arrival Date" />
-			</f:facet>
-			<h:outputText value="#{flightValue.arrivalDate}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Arrival Time" />
-			</f:facet>
-			<h:outputText value="#{flightValue.arrivalTime}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="airline" />
-			</f:facet>
-			<h:outputText value="#{flightValue.airline.name}" />
-		</h:column>
-	
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Origin(Airport name)" />
-			</f:facet>
-			<h:outputText value="#{flightValue.origin.name}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Origin (Airport id)" />
-			</f:facet>
-			<h:outputText value="#{flightValue.origin.id}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Destination (airport id)" />
-			</f:facet>
-			<h:outputText value="#{flightValue.destination.name}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Destination (airport id)" />
-			</f:facet>
-			<h:outputText value="#{flightValue.destination.id}" />
-		</h:column>
-		<h:column>
-			<f:facet name="header">
-				<h:outputText value="Airpline Serial Number" />
-			</f:facet>
-			<h:outputText value="#{flightValue.airplane.serialnr}" />
-		</h:column>
-	</h:dataTable>
+							<div class="form-group mx-sm-3">
+								<h:inputText class="form-control" id="searchAirlineInput"
+									value="${bean.searchString}" />
+							</div>
+							<div class="form-group">
+								<div class="col-xs-5 col-xs-offset-3">
+									<h:commandButton class="btn btn-default"
+										value="search by Airline" action="#{bean.search()}">
+										<f:ajax event="click" listener="#{bean.filterAirline}"
+											execute="@form" render="table" />
+									</h:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="form-inline">
+						<h:form id="searchDestinationForm">
+							<div class="form-group mx-sm-3">
+								<h:inputText class="form-control" id="searchDestinationInput"
+									value="${bean.searchDestination}" />
+							</div>
+							<div class="form-group">
+								<div class="col-xs-5 col-xs-offset-3">
+									<h:commandButton class="btn btn-default"
+										value="searchDestination"
+										action="#{bean.searchByDestination()}">
+										<f:ajax event="click" listener="#{bean.filterDestination}"
+											execute="@form" render="table" />
+									</h:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="form-inline">
+						<h:form id="searchOriginForm">
+							<div class="form-group mx-sm-3">
+								<h:inputText class="form-control" id="searchOriginInput"
+									value="${bean.searchOrigin}" />
+							</div>
+							<div class="form-group">
+								<div class="col-xs-5 col-xs-offset-3">
+									<h:commandButton class="btn btn-default" value="searchOrigin"
+										action="#{bean.searchByOrigin()}">
+										<f:ajax event="click" listener="#{bean.filterOrigin}"
+											execute="@form" render="table" />
+									</h:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="form-inline">
+						<h:form id="searchArrivalDateForm">
+							<form id="eventForm" method="post" class="form-inline">
+								<div class="form-group">
+									<div class="form-group mx-sm-3 date">
+										<div class="input-group input-append date" id="datePicker">
+											<h:inputText id="searchArrivalDate" class="form-control"
+												value="${bean.searchArrivalDate}" />
+											<span class="input-group-addon add-on"> <span
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+									</div>
 
+									<div class="form-group">
+										<div class="col-xs-5 col-xs-offset-3">
+											<h:commandButton value="search by Arrival Date"
+												class="btn btn-default"
+												action="#{bean.searchByArrivalDate()}">
+												<f:ajax event="click" listener="#{bean.filterArrivalDate}"
+													execute="@form" render="table" />
+											</h:commandButton>
+										</div>
+									</div>
+								</div>
+							</form>
+						</h:form>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="form-inline">
+						<h:form id="searchDepartureDateForm">
+							<h:form id="eventForm2" method="post" class="form-inline">
+								<div class="form-group">
+									<div class="form-group mx-sm-3 date">
+										<div class="input-group input-append date" id="datePicker2">
+											<h:inputText id="searchDepartureDate" class="form-control"
+												value="${bean.searchDepartureDate}" />
+											<span class="input-group-addon add-on"> <span
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-xs-5 col-xs-offset-3">
+										<h:commandButton value="search by Departure Date"
+											class="btn btn-default"
+											action="#{bean.searchByDepartureDate()}">
+											<f:ajax event="click" listener="#{bean.filterDepartureDate}"
+												execute="@form" render="table" />
+										</h:commandButton>
+									</div>
+								</div>
+							</h:form>
+						</h:form>
+					</div>
+				</div>
+			</h:form>
+
+		</div>
+		<div id="main">
+			<h:dataTable id="table" value="#{bean.flightList}" var="flightValue"
+				class=".table-bordered">
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="id" />
+					</f:facet>
+					<h:outputText value="#{flightValue.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Flight number" />
+					</f:facet>
+					<h:outputText value="#{flightValue.flightnr}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Departure Date" />
+					</f:facet>
+					<h:outputText value="#{flightValue.departureDate}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Departure Time" />
+					</f:facet>
+					<h:outputText value="#{flightValue.departureTime}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Arrival Date" />
+					</f:facet>
+					<h:outputText value="#{flightValue.arrivalDate}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Arrival Time" />
+					</f:facet>
+					<h:outputText value="#{flightValue.arrivalTime}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="airline" />
+					</f:facet>
+					<h:outputText value="#{flightValue.airline.name}" />
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Origin(Airport name)" />
+					</f:facet>
+					<h:outputText value="#{flightValue.origin.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Origin (Airport id)" />
+					</f:facet>
+					<h:outputText value="#{flightValue.origin.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Destination (airport name)" />
+					</f:facet>
+					<h:outputText value="#{flightValue.destination.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Destination (airport id)" />
+					</f:facet>
+					<h:outputText value="#{flightValue.destination.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Airpline Serial Number" />
+					</f:facet>
+					<h:outputText value="#{flightValue.airplane.serialnr}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Airpline Model" />
+					</f:facet>
+					<h:outputText value="#{flightValue.airplane.model}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Airpline Capacity" />
+					</f:facet>
+					<h:outputText value="#{flightValue.airplane.capacity}" />
+				</h:column>
+			</h:dataTable>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#datePicker').datepicker({
+				format : 'mm/dd/yyyy'
+			}).on('changeDate', function(e) {
+				// Revalidate the date field
+				$('#eventForm').formValidation('revalidateField', 'date');
+			});
+
+			$('#eventForm').formValidation({
+				framework : 'bootstrap',
+				icon : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					name : {
+						validators : {
+							notEmpty : {
+								message : 'The name is required'
+							}
+						}
+					},
+					date : {
+						validators : {
+							notEmpty : {
+								message : 'The date is required'
+							},
+							date : {
+								format : 'MM/DD/YYYY',
+								message : 'The date is not a valid'
+							}
+						}
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			$('#datePicker2').datepicker({
+				format : 'mm/dd/yyyy'
+			}).on('changeDate', function(e) {
+				// Revalidate the date field
+				$('#eventForm').formValidation('revalidateField', 'date');
+			});
+
+			$('#eventForm2').formValidation({
+				framework : 'bootstrap',
+				icon : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					name : {
+						validators : {
+							notEmpty : {
+								message : 'The name is required'
+							}
+						}
+					},
+					date : {
+						validators : {
+							notEmpty : {
+								message : 'The date is required'
+							},
+							date : {
+								format : 'MM/DD/YYYY',
+								message : 'The date is not a valid'
+							}
+						}
+					}
+				}
+			});
+		});
+	</script>
 </h:body>
 </html>

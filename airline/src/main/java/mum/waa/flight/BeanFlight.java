@@ -2,6 +2,7 @@ package mum.waa.flight;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -70,8 +71,18 @@ public class BeanFlight {
 	public void searchByDestination() {
 
 	}
+
 	public void searchByOrigin() {
 
+	}
+
+	@PostConstruct
+	public void init() {
+		Client client = ClientBuilder.newClient();
+		List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
+				.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
+				});
+		flightList = a;
 	}
 
 	public void filterAirline(AjaxBehaviorEvent event) {
@@ -121,14 +132,15 @@ public class BeanFlight {
 			System.out.println("not null " + searchOrigin);
 			Client client = ClientBuilder.newClient();
 			List<Flight> a = client
-					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByOrigin?originId="
-							+ searchOrigin)
+					.target("http://localhost:8080/airlinesWebApp/rs/flight/findByOrigin?originId=" + searchOrigin)
 					.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Flight>>() {
 					});
 			flightList = a;
 		}
 	}
+
 	public void filterArrivalDate(AjaxBehaviorEvent event) {
+		System.out.println("arrival data: " + searchArrivalDate);
 		if (searchArrivalDate.isEmpty()) {
 			Client client = ClientBuilder.newClient();
 			List<Flight> a = client.target("http://localhost:8080/airlinesWebApp/rs/flight/findAll")
@@ -146,7 +158,7 @@ public class BeanFlight {
 			flightList = a;
 		}
 	}
-	
+
 	public void filterDepartureDate(AjaxBehaviorEvent event) {
 		if (searchDepartureDate.isEmpty()) {
 			Client client = ClientBuilder.newClient();
@@ -165,7 +177,6 @@ public class BeanFlight {
 			flightList = a;
 		}
 	}
-
 
 	public List<Flight> getAllFlight() {
 		Client client = ClientBuilder.newClient();
@@ -255,7 +266,5 @@ public class BeanFlight {
 	public void setSearchOrigin(String searchOrigin) {
 		this.searchOrigin = searchOrigin;
 	}
-	
-	
 
 }
